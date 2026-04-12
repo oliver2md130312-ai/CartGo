@@ -28,6 +28,12 @@
                     <label>Contraseña</label>
                     <input type="password" id="loginPassword" placeholder="••••••••" required>
                 </div>
+                <div style="display: block; text-align: center;">
+                    <button id="btn-ver" class="btn-ver" type="button" onclick="ver()">Mostrar contraseña</button>
+                    
+                </div>
+                <br>
+                <hr><br>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
             </form>
 
@@ -47,6 +53,19 @@
         </div>
     </footer>
 <script>
+    function ver(){
+        const pass = document.getElementById('loginPassword');
+        const btn = document.getElementById('btn-ver');
+
+        if (pass.type === "password"){
+            btn.textContent = "Ocultar contraseña";
+            pass.type = "text";
+        } else {
+            btn.textContent = "Mostrar contraseña";
+            pass.type = "password";
+        }
+    }
+
     const user = localStorage.getItem('userEmail');
     if (user) {
         window.location.href = "../dashboard"

@@ -6,82 +6,29 @@
     <title>Mis Listas | CartGo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
-    <link rel="manifest" href="../favicon/site.webmanifest">
     <style>
         .navbar {
             width: 100%; background: white; padding: 1rem 2rem;
             display: flex; justify-content: space-between; align-items: center;
             position: fixed; top: 0; left: 0; box-shadow: var(--shadow); z-index: 1000;
         }
-
         .grid-listas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            width: 100%;
-            margin-top: 2rem;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem; width: 100%; margin-top: 2rem;
         }
-
         .card-lista {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: white; padding: 1.5rem; border-radius: 20px;
+            box-shadow: var(--shadow); transition: var(--transition);
+            border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between;
         }
-
-        .card-lista:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-        }
-
-        .badge {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
+        .card-lista:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+        .badge { font-size: 0.7rem; padding: 4px 10px; border-radius: 50px; font-weight: 700; text-transform: uppercase; }
         .badge-owner { background: #e8f8f0; color: #27ae60; }
         .badge-guest { background: #e3f2fd; color: #3498db; }
-
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 1.5rem;
-        }
-
-        .btn-sm {
-            padding: 0.6rem 1.2rem;
-            font-size: 0.85rem;
-            flex: 1;
-        }
-
-        .btn-delete {
-            background: #fff0f0;
-            color: #ff7675;
-            border: 1px solid #ff7675;
-        }
-
-        .btn-delete:hover {
-            background: #ff7675;
-            color: white;
-        }
-
-        #loadingMsg {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-muted);
-        }
+        .card-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+        .btn-sm { padding: 0.6rem 1.2rem; font-size: 0.85rem; flex: 1; }
+        .btn-delete { background: #fff0f0; color: #ff7675; border: 1px solid #ff7675; }
+        .btn-exit { background: #f8f9fa; color: #666; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -89,7 +36,7 @@
     <nav class="navbar">
         <div style="font-weight: 700; color: var(--primary); font-size: 1.5rem;">CartGo</div>
         <div style="display: flex; align-items: center; gap: 15px;">
-            <span id="displayUser" style="font-weight: 600;">Usuario</span>
+            <span id="displayUser" style="font-weight: 600;">Cargando...</span>
             <a href="#" onclick="logout()" style="color: #ff7675; text-decoration: none; font-size: 0.8rem; font-weight: 700;">SALIR</a>
         </div>
     </nav>
@@ -104,35 +51,30 @@
         </header>
 
         <div class="grid-listas" id="gridListas">
-            <div id="loadingMsg">Cargando tus listas...</div>
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #999;">Cargando tus listas...</div>
         </div>
     </main>
+
     <footer class="main-footer">
         <div class="footer-content">
             <p>© 2026 CartGo - Tu lista de la compra inteligente</p>
-            <p class="sync-notice">
-                <span class="sync-icon">🔄</span> 
-                Los cambios pueden tardar unos segundos en sincronizarse con todos los dispositivos.
-            </p>
+            <p style="color:#95a5a6; font-size:0.8rem;">🔄 Los cambios pueden tardar unos segundos en sincronizarse.</p>
         </div>
     </footer>
+
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgT7fMgUJezpZlKU060N3p0SqLDEQKPByZG94a2-GIna7xIWkbCa0sJy3T3JWGw4Wq/exec"; // REEMPLAZA ESTO
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgT7fMgUJezpZlKU060N3p0SqLDEQKPByZG94a2-GIna7xIWkbCa0sJy3T3JWGw4Wq/exec";
         const userEmail = localStorage.getItem('userEmail');
         const userName = localStorage.getItem('userName');
 
-        // Redirigir si no hay sesión
-        if (!userEmail) { window.location.href = '../login/'; }
+        if (!userEmail) window.location.href = '../login/';
         document.getElementById('displayUser').innerText = userName;
 
         async function cargarListas() {
             try {
                 const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: "getLists",
-                        email: userEmail
-                    })
+                    body: JSON.stringify({ action: "getLists", email: userEmail })
                 });
                 const data = await response.json();
                 const grid = document.getElementById('gridListas');
@@ -142,77 +84,62 @@
                     data.listas.forEach(lista => {
                         const card = document.createElement('div');
                         card.className = 'card-lista';
-                        
-                        // Si es dueño sale badge verde, si es invitado sale badge azul
                         const badgeClass = lista.isOwner ? 'badge-owner' : 'badge-guest';
                         const badgeText = lista.isOwner ? 'Dueño' : 'Invitado';
 
                         card.innerHTML = `
                             <div>
-                                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-                                    <span class="badge ${badgeClass}">${badgeText}</span>
-                                </div>
-                                <h3 style="margin:0; font-size:1.4rem;">${lista.nombre}</h3>
+                                <span class="badge ${badgeClass}">${badgeText}</span>
+                                <h3 style="margin:0.5rem 0; font-size:1.4rem;">${lista.nombre}</h3>
                             </div>
                             <div class="card-actions">
-                                <button onclick="abrirLista('${lista.id}', '${lista.nombre}')" class="btn btn-primary btn-sm">Abrir Lista</button>
-                                ${lista.isOwner ? `<button onclick="eliminarLista('${lista.id}')" class="btn btn-sm btn-delete">Eliminar</button>` : ''}
+                                <button onclick="abrirLista('${lista.id}', '${lista.nombre}', ${lista.isOwner})" class="btn btn-primary btn-sm">Abrir</button>
+                                ${lista.isOwner 
+                                    ? `<button onclick="eliminarLista('${lista.id}')" class="btn btn-sm btn-delete">Eliminar</button>` 
+                                    : `<button onclick="salirDeLista('${lista.id}')" class="btn btn-sm btn-exit">Salirse</button>`}
                             </div>
                         `;
                         grid.appendChild(card);
                     });
                 } else {
-                    grid.innerHTML = `<div id="loadingMsg">No tienes listas aún. ¡Crea una para empezar!</div>`;
+                    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:#999;">No tienes listas aún.</div>`;
                 }
-            } catch (error) {
-                document.getElementById('gridListas').innerHTML = "Error al conectar con el servidor.";
-            }
+            } catch (e) { console.error(e); }
         }
 
         async function crearNuevaLista() {
-            const nombre = prompt("¿Cómo quieres llamar a tu lista?");
+            const nombre = prompt("Nombre de la lista:");
             if (!nombre) return;
-
-            try {
-                const resp = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: "createList",
-                        nombre_lista: nombre,
-                        owner_email: userEmail
-                    })
-                });
-                cargarListas();
-            } catch (e) { alert("Error al crear"); }
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "createList", nombre_lista: nombre, owner_email: userEmail })
+            });
+            cargarListas();
         }
 
         async function eliminarLista(id) {
-            if (!confirm("¿Seguro que quieres borrar esta lista? Se perderán todos los productos.")) return;
-            
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: "deleteList",
-                        idLista: id,
-                        email: userEmail
-                    })
-                });
-                cargarListas();
-            } catch (e) { alert("Error al eliminar"); }
+            if (!confirm("¿Borrar lista permanentemente?")) return;
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "deleteList", idLista: id, email: userEmail })
+            });
+            cargarListas();
         }
 
-        function abrirLista(id, nombre) {
-            // Pasamos el nombre real por la URL para que la página lista lo lea
-            window.location.href = `../lista/?id=${id}&name=${encodeURIComponent(nombre)}`;
+        async function salirDeLista(id) {
+            if (!confirm("¿Seguro que quieres salirte de esta lista?")) return;
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "removeMe", idLista: id, email: userEmail })
+            });
+            cargarListas();
         }
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = '../';
+        function abrirLista(id, nombre, isOwner) {
+            window.location.href = `../lista/?id=${id}&name=${encodeURIComponent(nombre)}&owner=${isOwner}`;
         }
 
-        // Carga inicial
+        function logout() { localStorage.clear(); window.location.href = '../'; }
         cargarListas();
     </script>
 </body>

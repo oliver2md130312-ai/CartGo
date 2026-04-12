@@ -299,3 +299,22 @@ h1 {
         padding: 1.5rem 1rem;
     }
 }
+
+.btn-ver{
+    transition: 0.3s;
+    background-color: 
+    rgb(52, 178, 10); 
+    border-radius: 10px; 
+    color: white; 
+    border: none; 
+    padding: 10px 5px; 
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-ver:hover{
+    font-size: 0.9rem;
+    transition: 0.3s;
+    filter: brightness(1.1);
+    padding: 12px 8px;
+}

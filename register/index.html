@@ -6,7 +6,7 @@
     <title>Registro | CartGo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-        <link rel="stylesheet" href="../style.css">
+
     <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
@@ -32,6 +32,12 @@
                     <label>Contraseña</label>
                     <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" required>
                 </div>
+                <div style="display: block; text-align: center;">
+                    <button id="btn-ver" class="btn-ver" type="button" onclick="ver()">Mostrar contraseña</button>
+                    
+                </div>
+                <br>
+                <hr><br>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Registrarse</button>
             </form>
 
@@ -50,6 +56,19 @@
         </div>
     </footer>
 <script>
+    function ver(){
+        const pass = document.getElementById('regPass');
+        const btn = document.getElementById('btn-ver');
+
+        if (pass.type === "password"){
+            btn.textContent = "Ocultar contraseña";
+            pass.type = "text";
+        } else {
+            btn.textContent = "Mostrar contraseña";
+            pass.type = "password";
+        }
+    }
+
     const user = localStorage.getItem('userEmail');
     if (user) {
         window.location.href = "../dashboard"
