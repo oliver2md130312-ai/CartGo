@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CartGo | Tu Lista Compartida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        <section class="hero">
+            <h1>CartGo</h1>
+            <p class="hero-text">
+                La forma más sencilla de organizar las compras de casa. 
+                Sincroniza tus productos con Google Sheets y colabora con quien quieras.
+            </p>
+            
+            <div class="btn-group">
+                <a href="/login/" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="/register/" class="btn btn-primary">Registrarse Gratis</a>
+            </div>
+        </section>
+
+        <section class="features-grid">
+            <div class="feature-item">
+                <h3>🔄 Tiempo Real</h3>
+                <p>Lo que añades aparece al instante para todos.</p>
+            </div>
+            <div class="feature-item">
+                <h3>📱 100% Mobile</h3>
+                <p>Úsalo en el supermercado desde tu móvil.</p>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>© 2026 CartGo - Tu lista de la compra inteligente</p>
+            <p class="sync-notice">
+                <span class="sync-icon">🔄</span> 
+                Los cambios pueden tardar unos segundos en sincronizarse con todos los dispositivos.
+            </p>
+        </div>
+    </footer>
+    <script>
+        const user = localStorage.getItem('userEmail');
+
+        if (user){
+            window.location.href = "/dashboard"
+        }
+    </script>
+</body>
+</html>

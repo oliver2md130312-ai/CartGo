@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista | CartGo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .nav-lista { 
+            background: white; padding: 1rem 2rem; display: flex; 
+            justify-content: space-between; align-items: center; 
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; 
+        }
+        .btn-back { 
+            background: #f0f0f0; color: #333; padding: 0.6rem 1.2rem; 
+            border-radius: 10px; text-decoration: none; font-weight: 600; 
+            font-size: 0.8rem; transition: 0.2s; border: none; cursor: pointer;
+        }
+        .btn-back:hover { background: #e0e0e0; }
+        
+        .section-title { 
+            margin: 2rem 0 1rem; font-size: 1.1rem; font-weight: 700; 
+            display: flex; align-items: center; gap: 10px; color: var(--dark);
+        }
+        
+        /* Contenedores de productos */
+        .shopping-list { background: transparent; box-shadow: none; border-radius: 0; }
+        
+        .list-pendientes { border-left: 6px solid #f1c40f; margin-bottom: 2rem; }
+        .list-comprados { border-left: 6px solid #2ecc71; opacity: 0.8; }
+        
+        .shopping-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 1rem; background: white; margin-bottom: 5px; 
+            border-radius: 0 10px 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .item-content { display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .comprado-texto { text-decoration: line-through; color: #95a5a6; }
+        
+        input[type="checkbox"] { transform: scale(1.4); cursor: pointer; accent-color: var(--primary); }
+        
+        .delete-icon { background: none; border: none; color: #ff7675; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-lista">
+        <div style="display:flex; align-items:center; gap:15px;">
+            <a href="../dashboard/" class="btn-back">← Volver</a>
+            <h2 id="tituloLista" style="margin:0; font-size: 1.2rem;">Cargando lista...</h2>
+        </div>
+        <button id="btnColab" class="btn btn-outline" style="padding:0.5rem 1rem; font-size:0.8rem;" onclick="invitarPersona()">+ Invitar</button>
+    </nav>
+
+    <main class="container" style="justify-content: flex-start; padding-top: 2rem;">
+        <form id="addItemForm" style="width:100%; max-width:500px; display:flex; gap:10px; margin-bottom: 1rem;">
+            <input type="text" id="itemName" class="btn" style="flex: 1; text-align: left; border: 2px solid #ddd; cursor: text;" placeholder="Añadir nuevo producto..." required>
+            <button type="submit" id="btnAdd" class="btn btn-primary" style="padding: 0 1.5rem;">Añadir</button>
+        </form>
+
+        <div style="width: 100%; max-width: 500px;">
+            <div class="section-title">⏳ Pendientes</div>
+            <div id="listaPendientes" class="shopping-list list-pendientes"></div>
+
+            <div class="section-title">✅ Comprados</div>
+            <div id="listaComprados" class="shopping-list list-comprados"></div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>© 2026 CartGo - Tu lista de la compra inteligente</p>
+            <p class="sync-notice">
+                <span class="sync-icon">🔄</span> 
+                Los cambios pueden tardar unos segundos en sincronizarse con todos los dispositivos.
+            </p>
+        </div>
+    </footer>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const idLista = urlParams.get('id');
+        const nombreLista = decodeURIComponent(urlParams.get('name') || "Lista");
+        const userEmail = localStorage.getItem('userEmail');
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgT7fMgUJezpZlKU060N3p0SqLDEQKPByZG94a2-GIna7xIWkbCa0sJy3T3JWGw4Wq/exec"; // REEMPLAZA ESTO
+
+        document.getElementById('tituloLista').innerText = nombreLista;
+
+        // 1. CARGAR PRODUCTOS DESDE EL SHEETS
+        async function cargarProductos() {
+            try {
+                const resp = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "getProducts", idLista: idLista })
+                });
+                const data = await resp.json();
+                
+                const contPendientes = document.getElementById('listaPendientes');
+                const contComprados = document.getElementById('listaComprados');
+                
+                contPendientes.innerHTML = "";
+                contComprados.innerHTML = "";
+
+                if (data.productos && data.productos.length > 0) {
+                    data.productos.forEach(prod => {
+                        const itemHtml = `
+                            <div class="shopping-item">
+                                <div class="item-content">
+                                    <input type="checkbox" ${prod.comprado ? 'checked' : ''} onchange="toggleProducto(${prod.id}, ${!prod.comprado})">
+                                    <span class="${prod.comprado ? 'comprado-texto' : ''}">${prod.nombre}</span>
+                                </div>
+                                <button class="delete-icon" onclick="eliminarProducto(${prod.id})">Eliminar</button>
+                            </div>
+                        `;
+                        if (prod.comprado) contComprados.innerHTML += itemHtml;
+                        else contPendientes.innerHTML += itemHtml;
+                    });
+                } else {
+                    contPendientes.innerHTML = "<p style='padding:1rem; color:#999;'>No hay productos pendientes.</p>";
+                }
+            } catch (e) {
+                console.error("Error al cargar productos");
+            }
+        }
+
+        // 2. AÑADIR PRODUCTO
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const input = document.getElementById('itemName');
+            const btn = document.getElementById('btnAdd');
+            const nombre = input.value;
+
+            // Feedback visual para evitar que se quede pillado
+            input.disabled = true;
+            btn.innerText = "...";
+            btn.disabled = true;
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        action: "addProduct", 
+                        idLista: idLista, 
+                        nombre: nombre 
+                    })
+                });
+                input.value = "";
+                await cargarProductos();
+            } catch (error) {
+                alert("Error al guardar en la nube");
+            } finally {
+                input.disabled = false;
+                btn.innerText = "Añadir";
+                btn.disabled = false;
+            }
+        });
+
+        // 3. MARCAR COMO COMPRADO O PENDIENTE
+        async function toggleProducto(idProd, nuevoEstado) {
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: "toggleProduct", 
+                    idProd: idProd, 
+                    comprado: nuevoEstado 
+                })
+            });
+            cargarProductos();
+        }
+
+        // 4. ELIMINAR PRODUCTO
+        async function eliminarProducto(idProd) {
+            if(!confirm("¿Eliminar este producto?")) return;
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: "deleteProduct", 
+                    idProd: idProd 
+                })
+            });
+            cargarProductos();
+        }
+
+        // 5. INVITAR COLABORADOR
+        async function invitarPersona() {
+            const email = prompt("Escribe el email de la persona que quieres añadir:");
+            if (!email) return;
+            
+            try {
+                const resp = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        action: "addCollaborator", 
+                        idLista: idLista, 
+                        colabEmail: email 
+                    })
+                });
+                const res = await resp.json();
+                if(res.status === "success") alert("¡Usuario invitado con éxito!");
+                else alert("Error: " + res.message);
+            } catch (e) {
+                alert("Error de conexión");
+            }
+        }
+
+        // RECARGA AUTOMÁTICA cada 10 segundos
+        setInterval(cargarProductos, 10000);
+        
+        // Carga inicial al abrir la página
+        cargarProductos();
+    </script>
+</body>
+</html>
