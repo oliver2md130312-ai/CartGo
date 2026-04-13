@@ -48,15 +48,66 @@
     </footer>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const idLista = urlParams.get('id');
-        const nombreLista = decodeURIComponent(urlParams.get('name') || "Lista");
-        const isOwner = urlParams.get('owner') === 'true';
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgT7fMgUJezpZlKU060N3p0SqLDEQKPByZG94a2-GIna7xIWkbCa0sJy3T3JWGw4Wq/exec";
+const urlParams = new URLSearchParams(window.location.search);
+    const idLista = urlParams.get('id');
+    const userEmail = localStorage.getItem('userEmail');
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgT7fMgUJezpZlKU060N3p0SqLDEQKPByZG94a2-GIna7xIWkbCa0sJy3T3JWGw4Wq/exec";
 
-        document.getElementById('tituloLista').innerText = nombreLista;
-        if (!isOwner) document.getElementById('btnColab').style.display = 'none';
+    // 1. SEGURIDAD INICIAL: ¿Hay alguien logueado?
+    if (!userEmail || !idLista) {
+        window.location.href = '../login/';
+    }
 
+    // Variable global para el permiso real
+    let soyOwnerReal = false;
+
+    // 2. FUNCIÓN DE VALIDACIÓN DE SEGURIDAD
+    async function verificarSeguridad() {
+        try {
+            const resp = await fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: "verifyAccess", 
+                    idLista: idLista, 
+                    email: userEmail 
+                })
+            });
+            const res = await resp.json();
+
+            if (res.status === "success") {
+                // Si tiene permiso, configuramos la interfaz
+                soyOwnerReal = res.isOwner;
+                document.getElementById('btnColab').style.display = soyOwnerReal ? 'block' : 'none';
+                
+                // Una vez verificado, cargamos el nombre y los productos
+                cargarNombreLista(); 
+                cargarProductos();
+            } else {
+                // Si no tiene permiso o la lista no existe, fuera de aquí
+                alert("Acceso denegado: No tienes permiso para ver esta lista.");
+                window.location.href = '../dashboard/';
+            }
+        } catch (e) {
+            alert("Error de conexión con el servidor de seguridad.");
+            window.location.href = '../dashboard/';
+        }
+    }
+
+    // 3. CARGAR NOMBRE (Lo sacamos del servidor, no de la URL para evitar engaños)
+    async function cargarNombreLista() {
+        const resp = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: "getLists", email: userEmail })
+        });
+        const data = await resp.json();
+        const estaLista = data.listas.find(l => l.id === idLista);
+        if (estaLista) {
+            document.getElementById('tituloLista').innerText = estaLista.nombre;
+        }
+    }
+
+    // Llamamos a la seguridad nada más cargar
+    verificarSeguridad();
         async function cargarProductos() {
             try {
                 const resp = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: "getProducts", idLista: idLista }) });

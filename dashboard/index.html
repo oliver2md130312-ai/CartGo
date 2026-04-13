@@ -135,8 +135,8 @@
             cargarListas();
         }
 
-        function abrirLista(id, nombre, isOwner) {
-            window.location.href = `../lista/?id=${id}&name=${encodeURIComponent(nombre)}&owner=${isOwner}`;
+        function abrirLista(id) {
+            window.location.href = `../lista/?id=${id}`;
         }
 
         function logout() { localStorage.clear(); window.location.href = '../'; }
