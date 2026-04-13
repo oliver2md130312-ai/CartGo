@@ -3,58 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página no encontrada | CartGo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <title>404 - CartGo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
     <style>
-        .error-container {
-            text-align: center;
-            padding: 2rem;
+        :root {
+            --primary: #6c5ce7;
+            --bg: #f9f9fb;
+            --text: #2d3436;
+            --text-muted: #636e72;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
         .error-code {
             font-size: 8rem;
             font-weight: 800;
             color: var(--primary);
             line-height: 1;
             margin-bottom: 1rem;
-            opacity: 0.2;
+            background: linear-gradient(to bottom, var(--primary), #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .error-illustration {
+
+        .error-emoji {
             font-size: 4rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            display: block;
         }
+
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+
+        p { color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; }
+
         .btn-home {
-            display: inline-block;
-            margin-top: 2rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 2rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
 
-    <main class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div class="card error-container">
-            <div class="error-code">404</div>
-            <div class="error-illustration">🛒💨</div>
-            <h2>¡Uy! El carrito se ha escapado</h2>
-            <p style="color: var(--text-muted); margin-top: 1rem;">
-                La página que buscas no existe o ha sido movida a otra estantería.
-            </p>
-            
-            <a href="/dashboard/" class="btn btn-primary btn-home">
-                Volver a mis listas
-            </a>
-        </div>
-    </main>
+    <div class="error-card">
+        <span class="error-emoji">🛒💨</span>
+        <div class="error-code">404</div>
+        <h1>¡Se nos escapó el producto!</h1>
+        <p>Parece que la página que buscas no está en nuestras estanterías o el pasillo ha cambiado de número.</p>
+        
+        <a href="/dashboard/" class="btn-home">
+            Volver a mis listas
+        </a>
+    </div>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>© 2026 CartGo - Organiza tus compras sin errores.</p>
-        </div>
+    <footer>
+        © 2026 CartGo - Pasillo de errores
     </footer>
 
 </body>
