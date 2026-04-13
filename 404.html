@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página no encontrada | CartGo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.2;
+        }
+        .error-illustration {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn-home {
+            display: inline-block;
+            margin-top: 2rem;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="card error-container">
+            <div class="error-code">404</div>
+            <div class="error-illustration">🛒💨</div>
+            <h2>¡Uy! El carrito se ha escapado</h2>
+            <p style="color: var(--text-muted); margin-top: 1rem;">
+                La página que buscas no existe o ha sido movida a otra estantería.
+            </p>
+            
+            <a href="/dashboard/" class="btn btn-primary btn-home">
+                Volver a mis listas
+            </a>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>© 2026 CartGo - Organiza tus compras sin errores.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
