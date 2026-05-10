@@ -34,7 +34,7 @@
                 </div>
                 <br>
                 <hr><br>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                <button id="btn-entrar" type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
             </form>
 
             <div class="form-footer">
@@ -75,9 +75,11 @@
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = e.target.querySelector('button');
+        const btn = document.getElementById('btn-entrar');
         btn.innerText = "Verificando...";
         btn.disabled = true;
+        document.getElementById('loginEmail').disabled = true;
+        document.getElementById('loginPassword').disabled = true;
 
         const data = {
             action: "login",
@@ -104,6 +106,8 @@
         } finally {
             btn.innerText = "Entrar";
             btn.disabled = false;
+            document.getElementById('loginEmail').disabled = false;
+            document.getElementById('loginPassword').disabled = false;
         }
     });
 </script>

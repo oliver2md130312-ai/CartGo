@@ -78,11 +78,13 @@
 
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = e.target.querySelector('button');
+        const btn = document.getElementById('btn-entrar');
         const originalText = btn.innerText;
         
         btn.innerText = "Verificando...";
         btn.disabled = true;
+        document.getElementById('regName').disabled = true;
+        document.getElementById('regEmail').disabled = true;
 
         const data = {
             action: "register",
@@ -108,11 +110,15 @@
                 alert("⚠️ " + result.message);
                 btn.innerText = originalText;
                 btn.disabled = false;
+                document.getElementById('regName').disabled = false;
+                document.getElementById('regEmail').disabled = false;
             }
         } catch (error) {
             alert("Error de conexión. Inténtalo de nuevo.");
             btn.innerText = originalText;
             btn.disabled = false;
+            document.getElementById('regName').disabled = false;
+            document.getElementById('regEmail').disabled = false;
         }
     });
 </script>
